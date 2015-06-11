@@ -1,0 +1,81 @@
+from html.parser import HTMLParser
+import urllib.request as req
+import time
+
+fout = open("/home/consta/Desktop/Programing/SchoolProject/Archive/tm.txt", "w")
+
+url = "http://quote.rbc.ru/cash/#!/?sortf=BID&sortd=DESC&city=1&currency=3&summa=&period=60&pagerLimiter=600&pageNumber=1"
+a = req.urlopen(url).readall().decode()
+
+class MyHTMLParser(HTMLParser):
+        def handle_starttag(self, tag, attrs):
+                self.CurrSt_tag = tag
+                self.CurrSt_tagAttrs = attrs
+                if self.CurrSt_tag == "tr" and len(self.CurrSt_tagAttrs) >= 1 and len(self.CurrSt_tagAttrs[0]) >= 2 and self.CurrSt_tagAttrs[0][0] == "title" and self.CurrSt_tagAttrs[0][1] != None:
+                        name.append(self.CurrSt_tagAttrs[0][1])
+                if self.CurrSt_tag == "input" and len(self.CurrSt_tagAttrs) >= 2 and self.CurrSt_tagAttrs[0][0] == "id" and self.CurrSt_tagAttrs[1][0] == "type" and self.CurrSt_tagAttrs[1][1] == "checkbox":
+                        ID.append(self.CurrSt_tagAttrs[0][1])
+                if self.CurrSt_tag == "a" and len(self.CurrSt_tagAttrs) == 3 and self.CurrSt_tagAttrs[0] == ('href', '#') and self.CurrSt_tagAttrs[1] == ('target', '_blank') and self.CurrSt_tagAttrs[2][1][38:41] == "BID":
+                        BID.append(self.CurrSt_tagAttrs[2][1][42:49])
+                if self.CurrSt_tag == "a" and len(self.CurrSt_tagAttrs) == 3 and self.CurrSt_tagAttrs[0] == ('href', '#') and self.CurrSt_tagAttrs[1] == ('target', '_blank') and self.CurrSt_tagAttrs[2][1][38:41] == "ASK":
+                        ASK.append(self.CurrSt_tagAttrs[2][1][42:49])#PurchasingCost
+        def handle_data(self, data):
+                self.CurrSt_tag = self.get_starttag_text()
+                if self.CurrSt_tag != None and self.CurrSt_tag[0:10] == "<td class=" and self.CurrSt_tag[11:14] == "kom":
+                        Commission.append(data)#Commission
+                if self.CurrSt_tag != None and self.CurrSt_tag[0:10] == "<td class=" and self.CurrSt_tag[11:14] == "sum":
+                        Volume.append(data)#Volume
+                if self.CurrSt_tag != None and self.CurrSt_tag[0:10] == "<td class=" and self.CurrSt_tag[11:15] == "time":
+                        TM.append(data)
+
+parser = MyHTMLParser()
+
+ID = []
+Volume = []
+BID = [] #SaleCost
+ASK = [] #BuyCost
+name = [] #bank name
+Commission = []
+TM = []
+N = []
+
+CurTimeSec = time.time()
+
+while time.time() <= CurTimeSec + 30 + 2:                       #+2sec to give some time to program
+    if time.time() >= CurTimeSec + 30:                          #but list still reloads every 15 min
+        parser.feed(a)
+        TM = TM[2:]
+        NumberOfID = ID.__len__()                               #NumberOfId = how much deals I get
+        N = [[0, 0, 0, 0, 0, 0, 0] for i in range(NumberOfID)]  #N will be an array that is made of 
+        for i in range(NumberOfID):                             #small arrs that conists of Name of Bank,Id,salecost,buycost,last time upload(TM),Commission(Y/N)
+            N[i][0] = ID[i]         #uniq number for the exect deal 
+        for i in range(NumberOfID):
+            N[i][1] = Volume[i]     #max cost of sale(volume of sale)
+        for i in range(NumberOfID):
+            N[i][2] = BID[i]        #cost of sale
+        for i in range(NumberOfID):
+            N[i][3] = ASK[i]        #cost of buying
+        for i in range(NumberOfID):
+            N[i][4] = name[i]       #name of the bank
+        for i in range(NumberOfID):
+            N[i][5] = Commission[i] #commission of that bank
+        for i in range(NumberOfID):
+            N[i][6] = TM[i]     
+        for i in N:
+            fout.write(",".join(i))
+            fout.write("\n")
+#        NewN = [] #new array, same as N but have only those deals that are in 15 min time iterval
+#        while i <= NumberOfID:
+#            if  time.ctime(time.time() - 15 * 60 - 1)[11:19] < N[i][6] < time.ctime(time.time() + 1)[11:19]:
+#                NewN.append(N[i])
+#        CurTimeSec = time.time()
+#        BasketA = []
+#        BasketB = []
+#        BasketC = []
+#        BasketD = []
+
+
+    time.sleep(2)
+                        
+                                
+fout.close()
