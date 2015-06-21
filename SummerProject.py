@@ -28,27 +28,27 @@ def GoodBanks(N):
     B.reverse()
     
     for i in range(len(B)):
-        if 1 <= int(B[i][1]) <= 1000 and GBanksBID[0].__len__() < 10:
+        if 1 <= int(B[i][1]) <= 1000 and GBanksBID[0].__len__() < 5:
             GBanksBID[0].append(B[i])
-        elif 1001 <= int(B[i][1]) <= 5000 and GBanksBID[1].__len__() < 10:
+        elif 1001 <= int(B[i][1]) <= 5000 and GBanksBID[1].__len__() < 5:
             GBanksBID[1].append(B[i])
-        elif 5001 <= int(B[i][1]) <= 10000 and GBanksBID[2].__len__() < 10:
+        elif 5001 <= int(B[i][1]) <= 10000 and GBanksBID[2].__len__() < 5:
             GBanksBID[2].append(B[i])
-        elif 10001 <= int(B[i][1]) and GBanksBID[3].__len__() < 10:
+        elif 10001 <= int(B[i][1]) and GBanksBID[3].__len__() < 5:
             GBanksBID[3].append(B[i])
-        elif GBanksBID[0].__len__() == 10 and GBanksBID[1].__len__() == 10 and GBanksBID[2].__len__() == 10 and GBanksBID[3].__len__() == 10 :
+        elif GBanksBID[0].__len__() == 5 and GBanksBID[1].__len__() == 5 and GBanksBID[2].__len__() == 5 and GBanksBID[3].__len__() == 5 :
             break
     
     for i in range(len(A)):
-        if 1 <=int(A[i][1]) <= 1000 and GBanksASK[0].__len__() < 10:
+        if 1 <=int(A[i][1]) <= 1000 and GBanksASK[0].__len__() < 5:
             GBanksASK[0].append(A[i])
-        elif 1001 <= int(A[i][1]) <= 5000 and GBanksASK[1].__len__() < 10:
+        elif 1001 <= int(A[i][1]) <= 5000 and GBanksASK[1].__len__() < 5:
             GBanksASK[1].append(A[i])
-        elif 5001 <= int(A[i][1])<= 10000 and GBanksASK[2].__len__() < 10:
+        elif 5001 <= int(A[i][1])<= 10000 and GBanksASK[2].__len__() < 5:
             GBanksASK[2].append(A[i])
-        elif 10001 <= int(A[i][1]) and GBanksASK[3].__len__() < 10:
+        elif 10001 <= int(A[i][1]) and GBanksASK[3].__len__() < 5:
             GBanksASK[3].append(A[i])
-        elif GBanksASK[0].__len__() == 10 and GBanksASK[1].__len__() == 10 and GBanksASK[2].__len__() == 10 and GBanksASK[3].__len__() == 10 :
+        elif GBanksASK[0].__len__() == 5 and GBanksASK[1].__len__() == 5 and GBanksASK[2].__len__() == 5 and GBanksASK[3].__len__() == 5 :
             break
     if len(GBanksBID) == 0 or len(GBanksASK) == 0:
         print("Good Banks Error: No Banks")
@@ -315,7 +315,7 @@ def Get_BID_ASK_cost(N, Cost_Time_A, Cost_Time_B, Cost_Time_C, Cost_Time_D):
 
     [Best_A_ASK, Best_B_ASK, Best_C_ASK, Best_D_ASK] = Get_Best_ASK_Cost(N)
 
-    print(Best_A_BID, " # ",Best_B_BID, " # ",Best_C_BID, " # ",Best_D_BID, " # ",Best_A_ASK, " # ",Best_B_ASK, " # ",Best_C_ASK, " # ",Best_D_ASK)
+    print(str(time.ctime(time.time())),"#", Best_A_BID, " # ",Best_B_BID, " # ",Best_C_BID, " # ",Best_D_BID, " # ",Best_A_ASK, " # ",Best_B_ASK, " # ",Best_C_ASK, " # ",Best_D_ASK)
     Cost_Time_A = Cost_Time_A[1:]
     Cost_Time_B = Cost_Time_B[1:]
     Cost_Time_C = Cost_Time_C[1:]
@@ -328,7 +328,7 @@ def Get_BID_ASK_cost(N, Cost_Time_A, Cost_Time_B, Cost_Time_C, Cost_Time_D):
 
     return (Cost_Time_A, Cost_Time_B, Cost_Time_C, Cost_Time_D)
 
-def Make_HTML_page(BasketName):
+def Make_HTML_page(BasketName, GBanksBID, GBanksASK):
     HTMLpage = open("/home/consta/Desktop/Programing/SchoolProject/" + BasketName + "_HTMLpage.html", "w")
     text_part_1 = """
     <!DOCTYPE html>
@@ -380,6 +380,29 @@ def Make_HTML_page(BasketName):
     text_part_4 = """alt="Spread Plot" width="550" ></td>
         <td>"""
     #here we will put banksASK in HTML format
+    if BasketName == "Basket_A":
+        HTML_Good_BID_Banks = ""
+        for i in range(len(GBanksBID[0])):
+            HTML_Good_BID_Banks += str(i + 1) + ") " + "Цена покупки: " + str(GBanksBID[0][i][2]) + " " + "Цена продажи: " + str(GBanksBID[0][i][3]) + "<br>" + str(GBanksBID[0][i][4]) + "<br>" + str(GBanksBID[0][i][6]) + "<br>" + "<br>"
+    
+    if BasketName == "Basket_B":
+        HTML_Good_BID_Banks = ""
+        for i in range(len(GBanksBID[1])):
+            HTML_Good_BID_Banks += str(i + 1) + ") " + "Цена покупки: " + str(GBanksBID[1][i][2]) + " " + "Цена продажи: " + str(GBanksBID[1][i][3]) + "<br>" + str(GBanksBID[1][i][4]) + "<br>" + str(GBanksBID[1][i][6]) + "<br>" + "<br>"
+
+    if BasketName == "Basket_C":
+        HTML_Good_BID_Banks = ""
+        for i in range(len(GBanksBID[2])):
+            HTML_Good_BID_Banks += str(i + 1) + ") " + "Цена покупки: " + str(GBanksBID[2][i][2]) + " " + "Цена продажи: " + str(GBanksBID[2][i][3]) + "<br>" + str(GBanksBID[2][i][4]) + "<br>" + str(GBanksBID[2][i][6]) + "<br>" + "<br>"
+
+    if BasketName == "Basket_D":
+        HTML_Good_BID_Banks = ""
+        for i in range(len(GBanksBID[3])):
+            HTML_Good_BID_Banks += str(i + 1) + ") " + "Цена покупки: " + str(GBanksBID[3][i][2]) + " " + "Цена продажи: " + str(GBanksBID[3][i][3]) + "<br>" + str(GBanksBID[3][i][4]) + "<br>" + str(GBanksBID[3][i][6]) + "<br>" + "<br>"
+
+
+    text_part_4_5 = HTML_Good_BID_Banks
+    
     text_part_5 = """</td>
     </tr>
     <tr>
@@ -395,6 +418,28 @@ def Make_HTML_page(BasketName):
     text_part_6 = """ alt="Spread Plot" width="550" ></td>
         <td height="100">"""
     #Here we will put BID banks
+    if BasketName == "Basket_A":
+        HTML_Good_ASK_Banks = ""
+        for i in range(len(GBanksASK[0])):
+            HTML_Good_ASK_Banks += str(i + 1) + ") " + "Цена покупки: " + str(GBanksASK[0][i][2]) + " " + "Цена продажи: " + str(GBanksASK[0][i][3]) + "<br>" + str(GBanksASK[0][i][4]) + "<br>" + str(GBanksASK[0][i][6]) + "<br>" + "<br>"
+    
+    if BasketName == "Basket_B":
+        HTML_Good_ASK_Banks = ""
+        for i in range(len(GBanksASK[1])):
+            HTML_Good_ASK_Banks += str(i + 1) + ") " + "Цена покупки: " + str(GBanksASK[1][i][2]) + " " + "Цена продажи: " + str(GBanksASK[1][i][3]) + "<br>" + str(GBanksASK[1][i][4]) + "<br>" + str(GBanksASK[1][i][6]) + "<br>" + "<br>"
+
+    if BasketName == "Basket_C":
+        HTML_Good_ASK_Banks = ""
+        for i in range(len(GBanksASK[2])):
+            HTML_Good_ASK_Banks += str(i + 1) + ") " + "Цена покупки: " + str(GBanksASK[2][i][2]) + " " + "Цена продажи: " + str(GBanksASK[2][i][3]) + "<br>" + str(GBanksASK[2][i][4]) + "<br>" + str(GBanksASK[2][i][6]) + "<br>" + "<br>"
+
+    if BasketName == "Basket_D":
+        HTML_Good_ASK_Banks = ""
+        for i in range(len(GBanksASK[3])):
+            HTML_Good_ASK_Banks += str(i + 1) + ") " + "Цена покупки: " + str(GBanksASK[3][i][2]) + " " + "Цена продажи: " + str(GBanksASK[3][i][3]) + "<br>" + str(GBanksASK[3][i][4]) + "<br>" + str(GBanksASK[3][i][6]) + "<br>" + "<br>"
+
+
+    text_part_6_7 = HTML_Good_ASK_Banks
     text_part_7 = """</td>
     </tr>
     </table>
@@ -403,7 +448,7 @@ def Make_HTML_page(BasketName):
     </html>
     """
     
-    maintext = text_part_1 + text_part_1_2 + text_part_2 + text_part_2_3 + text_part_3 + text_part_3_4 + text_part_4 + text_part_5 + text_part_5_6 + text_part_6 + text_part_7
+    maintext = text_part_1 + text_part_1_2 + text_part_2 + text_part_2_3 + text_part_3 + text_part_3_4 + text_part_4 + text_part_4_5 + text_part_5 + text_part_5_6 + text_part_6 + text_part_6_7 + text_part_7
     HTMLpage.write(maintext)
     HTMLpage.close()
 
@@ -518,7 +563,9 @@ while True:
         Print_BID_ASK_Plot("Basket_C", Cost_Time_C)
         Print_BID_ASK_Plot("Basket_D", Cost_Time_D)
         #print("finished plot.")
-        Make_HTML_page("Basket_A")
+        
+        Make_HTML_page("Basket_A", GBanksBID, GBanksASK)
+        
         driver.refresh()
 
 
